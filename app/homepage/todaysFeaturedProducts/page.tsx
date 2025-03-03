@@ -13,7 +13,8 @@ const FeaturedProducts = () => {
     const fetchFeaturedProducts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/products/featured?page=${featuredPage}&size=${pageSize}`
+          `http://localhost:3001/api/products?category=featuredProducts&page=0&size=4
+`
         );
         const data = await response.json();
 

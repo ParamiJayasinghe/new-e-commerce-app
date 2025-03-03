@@ -13,7 +13,8 @@ const BestSellingProducts = () => {
     const fetchBestSellingProducts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/products/best-selling?page=${bestSellingPage}&size=${pageSize}`
+          `http://localhost:3001/api/products?category=bestSellingProducts&page=0&size=4
+`
         );
         const data = await response.json();
         setBestSellingProducts((prev) => [...prev, ...data]);
