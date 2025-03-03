@@ -7,19 +7,25 @@ const FeaturedProducts = () => {
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const [featuredPage, setFeaturedPage] = useState(0);
   const pageSize = 4;
+  const maxProducts = 16; // Stop fetching after 16 products
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/products/featured?page=${featuredPage}&size=${pageSize}`);
+        const response = await fetch(
+          `http://localhost:3001/api/products/featured?page=${featuredPage}&size=${pageSize}`
+        );
         const data = await response.json();
+
         setFeaturedProducts((prev) => [...prev, ...data]);
       } catch (error) {
         console.error("Error fetching featured products:", error);
       }
     };
 
-    fetchFeaturedProducts();
+    if (featuredProducts.length < maxProducts) {
+      fetchFeaturedProducts();
+    }
   }, [featuredPage]);
 
   return (
@@ -33,12 +39,14 @@ const FeaturedProducts = () => {
         ))}
       </div>
       <div className="flex justify-center mt-6">
-        <button
-          className="bg-green-700 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-green-800 transition duration-300"
-          onClick={() => setFeaturedPage((prev) => prev + 1)}
-        >
-          View more
-        </button>
+        {featuredProducts.length < maxProducts && (
+          <button
+            className="bg-green-700 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-green-800 transition duration-300"
+            onClick={() => setFeaturedPage((prev) => prev + 1)}
+          >
+            View more
+          </button>
+        )}
       </div>
     </div>
   );

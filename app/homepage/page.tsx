@@ -10,7 +10,7 @@ export default function Home() {
     <div className="min-h-screen bg-gray-100 p-6 md:p-10 bg-white">
       <FeaturedProducts />
       <BestSellingProducts />
-      <TodayDeals />
+      <TodayDeals /> 
     </div>
   );
 }

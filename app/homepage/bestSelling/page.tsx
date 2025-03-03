@@ -7,11 +7,14 @@ const BestSellingProducts = () => {
   const [bestSellingProducts, setBestSellingProducts] = useState<any[]>([]);
   const [bestSellingPage, setBestSellingPage] = useState(0);
   const pageSize = 4;
+  const maxProducts = 16; // Stop fetching after 16 products
 
   useEffect(() => {
     const fetchBestSellingProducts = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/products/best-selling?page=${bestSellingPage}&size=${pageSize}`);
+        const response = await fetch(
+          `http://localhost:3001/api/products/best-selling?page=${bestSellingPage}&size=${pageSize}`
+        );
         const data = await response.json();
         setBestSellingProducts((prev) => [...prev, ...data]);
       } catch (error) {
@@ -19,7 +22,9 @@ const BestSellingProducts = () => {
       }
     };
 
-    fetchBestSellingProducts();
+    if (bestSellingProducts.length < maxProducts) {
+      fetchBestSellingProducts();
+    }
   }, [bestSellingPage]);
 
   return (
@@ -33,12 +38,14 @@ const BestSellingProducts = () => {
         ))}
       </div>
       <div className="flex justify-center mt-6">
-        <button
-          className="bg-green-700 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-green-800 transition duration-300"
-          onClick={() => setBestSellingPage((prev) => prev + 1)}
-        >
-          View more
-        </button>
+        {bestSellingProducts.length < maxProducts && (
+          <button
+            className="bg-green-700 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-green-800 transition duration-300"
+            onClick={() => setBestSellingPage((prev) => prev + 1)}
+          >
+            View more
+          </button>
+        )}
       </div>
     </div>
   );

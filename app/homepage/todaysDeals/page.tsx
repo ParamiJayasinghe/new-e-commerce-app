@@ -1,3 +1,5 @@
+// todaysDeals/page.tsx
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -12,7 +14,7 @@ const TodaysDeals = () => {
   useEffect(() => {
     const fetchTodayDeals = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/products/today-deals?page=${todayDealsPage}&size=${pageSize}`);
+        const response = await fetch(`http://localhost:3001/api/products/today-deals`);
         const data = await response.json();
         setTodayDeals((prev) => [...prev, ...data]);
       } catch (error) {
