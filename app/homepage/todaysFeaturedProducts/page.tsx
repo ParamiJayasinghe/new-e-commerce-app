@@ -12,10 +12,8 @@ const FeaturedProducts = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/products?category=featuredProducts&page=0&size=4
-`
-        );
+        const response = await fetch(`http://localhost:3001/products?section=featured&page=${featuredPage}&size=4`);
+
         const data = await response.json();
 
         setFeaturedProducts((prev) => [...prev, ...data]);

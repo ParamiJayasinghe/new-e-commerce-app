@@ -12,10 +12,8 @@ const BestSellingProducts = () => {
   useEffect(() => {
     const fetchBestSellingProducts = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/products?category=bestSellingProducts&page=0&size=4
-`
-        );
+        const response = await fetch(`http://localhost:3001/products?section=bestselling&page=${bestSellingPage}&size=4`);
+
         const data = await response.json();
         setBestSellingProducts((prev) => [...prev, ...data]);
       } catch (error) {

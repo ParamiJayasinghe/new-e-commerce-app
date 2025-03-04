@@ -14,8 +14,8 @@ const TodaysDeals = () => {
   useEffect(() => {
     const fetchTodayDeals = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/products?category=todayDeals&page=0&size=4
-`);
+        const response = await fetch(`http://localhost:3001/products?section=todaydeals&page=${todayDealsPage}&size=4`);
+
         const data = await response.json();
         setTodayDeals((prev) => [...prev, ...data]);
       } catch (error) {
