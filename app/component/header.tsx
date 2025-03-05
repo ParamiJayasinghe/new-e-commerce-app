@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdAccountCircle, MdNotifications, MdFavoriteBorder, MdArrowDropDown } from "react-icons/md";
 
@@ -12,6 +13,12 @@ const Header = () => {
           <span className="text-2xl font-semibold text-black">All Categories</span>
           <MdArrowDropDown className="text-2xl cursor-pointer" />
         </div>
+
+        <Link href="/products">
+        <button className="text-sm font-bold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded-md bg-gray-100">
+          Manage Products
+        </button>
+        </Link>
 
         {/* Search Bar Section */}
         <div className="flex items-center space-x-6 flex-grow mx-6 text-black">

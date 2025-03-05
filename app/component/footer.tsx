@@ -12,8 +12,7 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-4 underline">Quick Links</h3>
           <ul className="space-y-2">
             {[
-              { name: "Home", path: "./" },
-              { name: "Products", path: "/products" },
+              { name: "Home", path: "/" },
               { name: "About Us", path: "/about-us" },
               { name: "Careers", path: "/careers" }
             ].map(({ name, path }) => (
