@@ -14,7 +14,7 @@ const Header = () => {
         </div>
 
         {/* Search Bar Section */}
-        <div className="flex items-center space-x-6 flex-grow mx-6">
+        <div className="flex items-center space-x-6 flex-grow mx-6 text-black">
           <input
             type="text"
             placeholder="Search product"
