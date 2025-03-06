@@ -14,7 +14,7 @@ const Header = () => {
           <MdArrowDropDown className="text-2xl cursor-pointer" />
         </div>
 
-        <Link href="/products">
+        <Link href="/productPage">
         <button className="text-sm font-bold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded-md bg-gray-100">
           Manage Products
         </button>
