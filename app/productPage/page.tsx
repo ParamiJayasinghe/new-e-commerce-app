@@ -1,85 +1,65 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import ProductList from "./Productcomponents/productList";
-import AddProductForm from "./Productcomponents/addProductForm";
-import EditProduct from "./Productcomponents/editProductForm";
-import DeleteProduct from "./Productcomponents/deleteProduct";
-import { fetchProducts, addProduct, editProduct, deleteProduct } from "./Productcomponents/productAction";
+import React, { useEffect, useState } from "react";
+import ProductCard from "./productCard";
+import AddProductForm from "./addProductForm";  // Import AddProductForm
 
-const ProductsPage = () => {
-  const [products, setProducts] = useState<any[]>([]);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [showEditForm, setShowEditForm] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  rating: number;
+  image: string;
+}
 
-  // Fetch products from backend
+const Products = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [featuredPage, setFeaturedPage] = useState(1);
+  const [isAddFormOpen, setIsAddFormOpen] = useState(false);  // State to handle the form visibility
+
   useEffect(() => {
-    const loadProducts = async () => {
-      const fetchedProducts = await fetchProducts();
-      setProducts(fetchedProducts);
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`http://localhost:3002/products?section=featured&page=${featuredPage}&size=4
+          `);
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
     };
-    loadProducts();
-  }, []);
 
-  const handleAddProduct = async (newProduct: any) => {
-    const addedProduct = await addProduct(newProduct);
-    if (addedProduct) {
-      setProducts([...products, addedProduct]);
-    }
-    setShowAddForm(false);
-  };
+    fetchProducts();
+  }, [featuredPage]);
 
-  const handleEditProduct = async (updatedProduct: any) => {
-    const editedProduct = await editProduct(updatedProduct);
-    if (editedProduct) {
-      setProducts(products.map((p) => (p.id === editedProduct.id ? editedProduct : p)));
-    }
-    setShowEditForm(false);
-  };
-
-  const handleDeleteProduct = async (id: number) => {
-    const section = "featured"; // Section is always 'featured' for the delete action
-    const success = await deleteProduct(id, section);
-    if (success) {
-      setProducts(products.filter((p) => p.id !== id));  // Remove deleted product from the list
-    }
-    setShowDeleteConfirm(false);
+  const toggleAddForm = () => {
+    setIsAddFormOpen(!isAddFormOpen);
   };
 
   return (
-    <div className="min-h-screen p-8 bg-white">
-      <h1 className="text-4xl font-bold text-center mb-6">Explore Our Products</h1>
-      <button className="bg-green-500 text-white px-6 py-2 rounded-lg mb-6" onClick={() => setShowAddForm(true)}>
+    <div className="min-h-screen p-8 relative">
+      <h1 className="text-4xl font-bold text-center mb-6">Featured Products</h1>
+
+      {/* Add New Product Button */}
+      <button
+        onClick={toggleAddForm}
+        className="absolute top-16 left-8 bg-blue-500 text-white p-4 rounded-lg shadow-lg"
+      >
         Add New Product
       </button>
 
-      <ProductList
-        products={products}
-        onEdit={(product) => {
-          setSelectedProduct(product);
-          setShowEditForm(true);
-        }}
-        onDelete={(product) => {
-          setSelectedProduct(product);
-          setShowDeleteConfirm(true);
-        }}
-      />
+      {/* Conditionally render Add Product Form */}
+      {isAddFormOpen && <AddProductForm onClose={toggleAddForm} />}
 
-      {showAddForm && <AddProductForm onClose={() => setShowAddForm(false)} onAdd={handleAddProduct} />}
-      {showEditForm && selectedProduct && (
-        <EditProduct product={selectedProduct} onClose={() => setShowEditForm(false)} onEdit={handleEditProduct} />
-      )}
-      {showDeleteConfirm && selectedProduct && (
-        <DeleteProduct
-          productId={selectedProduct.id}
-          onClose={() => setShowDeleteConfirm(false)}
-          onDelete={handleDeleteProduct}
-        />
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+        {products.length > 0 ? (
+          products.map((product) => <ProductCard key={product.id} product={product} />)
+        ) : (
+          <p className="text-center col-span-full">Loading products...</p>
+        )}
+      </div>
     </div>
   );
 };
 
-export default ProductsPage;
+export default Products;
