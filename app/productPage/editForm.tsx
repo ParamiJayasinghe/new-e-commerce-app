@@ -6,16 +6,21 @@ interface EditProductFormProps {
   onUpdate: (updatedProduct: any) => void;
 }
 
-const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose, onUpdate }) => {
+const EditProductForm: React.FC<EditProductFormProps> = ({
+  product,
+  onClose,
+  onUpdate,
+}) => {
   const [name, setName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
   const [rating, setRating] = useState(product.rating);
   const [image, setImage] = useState(product.image);
-  const [categoryId, setCategoryId] = useState(product.categoryId || ""); // Store selected category ID
-  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]); // Store categories
-  const section = "featured"; // Predefined value
+  const [categoryId, setCategoryId] = useState(product.categoryId || "");
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>(
+    []
+  );
+  const section = "featured";
 
-  // Fetch categories when component mounts
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -43,21 +48,24 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose, onU
       rating,
       image,
       section,
-      categoryId, // Update category ID
+      categoryId,
     };
 
     try {
-      const response = await fetch(`http://localhost:3002/products/${product.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedProduct),
-      });
+      const response = await fetch(
+        `http://localhost:3002/products/${product.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedProduct),
+        }
+      );
 
       if (response.ok) {
         onUpdate(updatedProduct);
-        onClose(); // Close the form after successful update
+        onClose();
       } else {
         console.error("Failed to update product");
       }
@@ -72,7 +80,9 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose, onU
         <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="name">Name</label>
+            <label className="block text-sm font-semibold mb-2" htmlFor="name">
+              Name
+            </label>
             <input
               id="name"
               type="text"
@@ -82,7 +92,9 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose, onU
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="price">Price</label>
+            <label className="block text-sm font-semibold mb-2" htmlFor="price">
+              Price
+            </label>
             <input
               id="price"
               type="number"
@@ -92,7 +104,12 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose, onU
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="rating">Rating</label>
+            <label
+              className="block text-sm font-semibold mb-2"
+              htmlFor="rating"
+            >
+              Rating
+            </label>
             <input
               id="rating"
               type="number"
@@ -102,7 +119,9 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose, onU
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="image">Image URL</label>
+            <label className="block text-sm font-semibold mb-2" htmlFor="image">
+              Image URL
+            </label>
             <input
               id="image"
               type="text"
@@ -113,7 +132,12 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose, onU
           </div>
           {/* Category Dropdown */}
           <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="category">Category</label>
+            <label
+              className="block text-sm font-semibold mb-2"
+              htmlFor="category"
+            >
+              Category
+            </label>
             <select
               id="category"
               value={categoryId}

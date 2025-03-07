@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import ProductCard from "./productCard";
-import AddProductForm from "./addProductForm";  // Import AddProductForm
+import AddProductForm from "./addProductForm";
 
 interface Product {
   id: number;
@@ -15,12 +15,13 @@ interface Product {
 const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [featuredPage, setFeaturedPage] = useState(1);
-  const [isAddFormOpen, setIsAddFormOpen] = useState(false);  // State to handle the form visibility
+  const [isAddFormOpen, setIsAddFormOpen] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`http://localhost:3002/products?section=featured&page=${featuredPage}&size=4
+        const response =
+          await fetch(`http://localhost:3002/products?section=featured&page=${featuredPage}&size=4
           `);
         const data = await response.json();
         setProducts(data);
@@ -53,7 +54,9 @@ const Products = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
         {products.length > 0 ? (
-          products.map((product) => <ProductCard key={product.id} product={product} />)
+          products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
         ) : (
           <p className="text-center col-span-full">Loading products...</p>
         )}

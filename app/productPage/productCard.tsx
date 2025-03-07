@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { FaStar } from "react-icons/fa"; 
+import { FaStar } from "react-icons/fa";
 import EditButton from "./editButton";
 import DeleteButton from "./deleteButton";
 import EditProductForm from "./editForm";
-import DeleteConfirmationModal from "./deleteModal"; // Import modal
+import DeleteConfirmationModal from "./deleteModal";
 
 interface Product {
   id: number;
@@ -16,36 +16,38 @@ interface Product {
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete confirmation
-  const [productData, setProductData] = useState<Product | null>(product); // Allow null value for productData
-
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [productData, setProductData] = useState<Product | null>(product);
   const handleEdit = () => {
     setIsEditModalOpen(true);
   };
 
   const handleDeleteClick = () => {
-    setIsDeleteModalOpen(true); // Show the delete confirmation modal
+    setIsDeleteModalOpen(true);
   };
 
   const handleDeleteConfirm = async () => {
     try {
-      const response = await fetch(`http://localhost:3002/products/${product.id}?section=featured`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `http://localhost:3002/products/${product.id}?section=featured`,
+        {
+          method: "DELETE",
+        }
+      );
       if (response.ok) {
-        setProductData(null); // Remove product from UI
+        setProductData(null);
       } else {
         console.error("Error deleting product");
       }
     } catch (error) {
       console.error("Error deleting product:", error);
     } finally {
-      setIsDeleteModalOpen(false); // Close the confirmation modal
+      setIsDeleteModalOpen(false);
     }
   };
 
   const handleDeleteCancel = () => {
-    setIsDeleteModalOpen(false); // Close the confirmation modal without deleting
+    setIsDeleteModalOpen(false);
   };
 
   const handleUpdate = (updatedProduct: any) => {
@@ -63,7 +65,9 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const filledStars = Array.from({ length: 5 }, (_, index) => (
     <FaStar
       key={index}
-      className={`w-4 h-4 ${index < productData.rating ? "text-green-500" : "text-gray-300"}`}
+      className={`w-4 h-4 ${
+        index < productData.rating ? "text-green-500" : "text-gray-300"
+      }`}
     />
   ));
 
@@ -82,14 +86,16 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
 
       {/* Name and Price */}
       <div className="flex justify-between items-start mt-6 text-lg md:text-xl">
-        <h2 className="font-semibold text-gray-800 leading-tight truncate">{productData.name}</h2>
-        <h2 className="text-gray-800 font-bold ml-8 text-lg">LKR {productData.price.toFixed(2)}</h2>
+        <h2 className="font-semibold text-gray-800 leading-tight truncate">
+          {productData.name}
+        </h2>
+        <h2 className="text-gray-800 font-bold ml-8 text-lg">
+          LKR {productData.price.toFixed(2)}
+        </h2>
       </div>
 
       {/* Rating Stars */}
-      <div className="flex space-x-1 mt-2">
-        {filledStars}
-      </div>
+      <div className="flex space-x-1 mt-2">{filledStars}</div>
 
       {/* Edit & Delete Buttons */}
       <div className="flex justify-center space-x-4 mt-4">

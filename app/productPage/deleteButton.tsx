@@ -1,4 +1,3 @@
-// DeleteButton.tsx
 import React from "react";
 
 interface DeleteButtonProps {
