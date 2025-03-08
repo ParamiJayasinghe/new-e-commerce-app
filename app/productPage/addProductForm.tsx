@@ -13,11 +13,12 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onClose }) => {
     price: "",
     rating: "",
     image: "",
-    section: "featured", // Default section is "featured"
-    categoryId: "", // Store selected category
+    section: "featured",
+    categoryId: "",
+    discountPrice: "",
+    soldItems: "",
   });
 
-  // Fetch categories from the backend
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -45,7 +46,12 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onClose }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Send data to backend
+    const parsedDiscountPrice =
+      formData.discountPrice === "null"
+        ? null
+        : parseFloat(formData.discountPrice);
+    const parsedSoldItems = parseInt(formData.soldItems, 10) || 0;
+
     try {
       const response = await fetch("http://localhost:3002/products", {
         method: "POST",
@@ -56,14 +62,16 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onClose }) => {
           ...formData,
           price: parseFloat(formData.price),
           rating: parseInt(formData.rating, 10),
-          categoryId: parseInt(formData.categoryId, 10), // Ensure categoryId is a number
-          id: 0, // Allow backend to generate the ID
+          categoryId: parseInt(formData.categoryId, 10),
+          discountPrice: parsedDiscountPrice,
+          soldItems: parsedSoldItems,
+          id: 0,
         }),
       });
 
       if (response.ok) {
         alert("Product added successfully!");
-        onClose(); // Close the form after adding the product
+        onClose();
       } else {
         alert("Failed to add product.");
       }
@@ -120,6 +128,28 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onClose }) => {
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md"
               required
+            />
+          </div>
+          <div>
+            <label className="block font-medium mb-2">
+              Discount Price (Enter 'null' if no discount)
+            </label>
+            <input
+              type="text"
+              name="discountPrice"
+              value={formData.discountPrice}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          <div>
+            <label className="block font-medium mb-2">Sold Items</label>
+            <input
+              type="number"
+              name="soldItems"
+              value={formData.soldItems}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
           {/* Category Dropdown */}

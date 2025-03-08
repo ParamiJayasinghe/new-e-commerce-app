@@ -2,29 +2,42 @@
 
 import { useState, useEffect } from "react";
 import ProductCard from "../../component/product";
+import { useCategory } from "../../context/categoryContext";
 
 const BestSellingProducts = () => {
   const [bestSellingProducts, setBestSellingProducts] = useState<any[]>([]);
   const [bestSellingPage, setBestSellingPage] = useState(0);
   const pageSize = 4;
-  const maxProducts = 16; // Stop fetching after 16 products
+  const maxProducts = 16;
+  const { selectedCategory } = useCategory();
 
   useEffect(() => {
     const fetchBestSellingProducts = async () => {
       try {
-        const response = await fetch(`http://localhost:3002/products?section=bestselling&page=${bestSellingPage}&size=4`);
+        let url = `http://localhost:3002/products?section=best-selling&page=${bestSellingPage}&size=${pageSize}`;
 
+        if (selectedCategory !== "All Categories") {
+          const response = await fetch("http://localhost:3002/categories");
+          const categories = await response.json();
+          const categoryObj = categories.find(
+            (cat: any) => cat.name === selectedCategory
+          );
+
+          if (categoryObj) {
+            url += `&categoryId=${categoryObj.id}`;
+          }
+        }
+
+        const response = await fetch(url);
         const data = await response.json();
-        setBestSellingProducts((prev) => [...prev, ...data]);
+        setBestSellingProducts(data);
       } catch (error) {
         console.error("Error fetching best-selling products:", error);
       }
     };
 
-    if (bestSellingProducts.length < maxProducts) {
-      fetchBestSellingProducts();
-    }
-  }, [bestSellingPage]);
+    fetchBestSellingProducts();
+  }, [bestSellingPage, selectedCategory]);
 
   return (
     <div>
