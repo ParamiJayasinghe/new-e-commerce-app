@@ -2,30 +2,42 @@
 
 import { useState, useEffect } from "react";
 import ProductCard from "../../component/product";
+import { useCategory } from "../../context/categoryContext";
 
 const FeaturedProducts = () => {
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const [featuredPage, setFeaturedPage] = useState(0);
   const pageSize = 4;
-  const maxProducts = 16; // Stop fetching after 16 products
+  const maxProducts = 16;
+  const { selectedCategory } = useCategory();
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const response = await fetch(`http://localhost:3002/products?section=featured&page=${featuredPage}&size=4`);
+        let url = `http://localhost:3002/products?section=featured&page=${featuredPage}&size=${pageSize}`;
 
+        if (selectedCategory !== "All Categories") {
+          const response = await fetch("http://localhost:3002/categories");
+          const categories = await response.json();
+          const categoryObj = categories.find(
+            (cat: any) => cat.name === selectedCategory
+          );
+
+          if (categoryObj) {
+            url += `&categoryId=${categoryObj.id}`;
+          }
+        }
+
+        const response = await fetch(url);
         const data = await response.json();
-
-        setFeaturedProducts((prev) => [...prev, ...data]);
+        setFeaturedProducts(data);
       } catch (error) {
         console.error("Error fetching featured products:", error);
       }
     };
 
-    if (featuredProducts.length < maxProducts) {
-      fetchFeaturedProducts();
-    }
-  }, [featuredPage]);
+    fetchFeaturedProducts();
+  }, [featuredPage, selectedCategory]);
 
   return (
     <div>
