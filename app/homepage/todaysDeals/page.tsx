@@ -44,7 +44,7 @@ const TodaysDeals = () => {
       <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center md:text-left mt-12 text-black">
         Today's Deals
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6" data-testid="deals-grid">
         {todayDeals.map((deal) => {
           const price = deal.price ?? 0;
           const discountPrice = deal.discountPrice ?? 0;
@@ -81,6 +81,7 @@ const TodaysDeals = () => {
               </div>
               <button
                 className="mt-6 bg-green-700 text-white py-3 px-8 rounded-3xl hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 transition duration-300 text-sm md:text-base"
+                aria-label="Add to Cart"
                 onClick={() => console.log("Add to Cart", deal)}
               >
                 Add to Cart

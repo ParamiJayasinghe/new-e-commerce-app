@@ -74,15 +74,18 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <div className="relative bg-white shadow-lg rounded-lg p-6 text-center w-full h-[500px] mx-auto transition-transform hover:scale-105 duration-300 mb-4">
       {/* Image Section */}
-      <div className="p-4 h-2/3 flex items-center justify-center">
-        <Image
-          src={productData.image}
-          alt={productData.name}
-          width={200}
-          height={200}
-          className="w-full h-full object-contain rounded-lg"
-        />
-      </div>
+<div className="p-4 h-2/3 flex items-center justify-center">
+  {productData.image && (
+    <Image
+      src={productData.image}
+      alt={productData.name}
+      width={200}
+      height={200}
+      className="w-full h-full object-contain rounded-lg"
+    />
+  )}
+</div>
+
 
       {/* Name and Price */}
       <div className="flex justify-between items-start mt-6 text-lg md:text-xl">
